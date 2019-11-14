@@ -22,7 +22,7 @@ class AuditModel(models.Model):
 class User(AbstractBaseUser, PermissionsMixin, AuditModel):
 
     username = models.CharField(
-        'Usuário', max_length=300, default=uuid.uuid4, unique=True, validators=[
+        'Usuário', max_length=255, default=uuid.uuid4, unique=True, validators=[
             validators.RegexValidator(
                 re.compile('^[\w.@+-]+$'),
                 'Informe um nome de usuário válido. '
@@ -34,7 +34,7 @@ class User(AbstractBaseUser, PermissionsMixin, AuditModel):
     )
 
     name = models.CharField('Nome', max_length=100, blank=False, null=False)
-    email = models.EmailField('E-mail',max_length=300,unique=True, blank=False, null=False)
+    email = models.EmailField('E-mail',max_length=255,unique=True, blank=False, null=False)
     is_staff = models.BooleanField('Equipe', default=False)
     is_active = models.BooleanField('Ativo', default=True)
     is_superuser = models.BooleanField('Super-Usuário', default=False)

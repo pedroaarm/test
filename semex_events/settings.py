@@ -90,15 +90,14 @@ WSGI_APPLICATION = 'semex_events.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'semex_novo',
-        'USER': 'semex_novo',
-        'PASSWORD': 'F(UH3B!g',
-        'HOST': '127.0.0.1',
-        'PORT': '5432',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'espeedu',
+        'USER': 'root',
+        'PASSWORD': 'admin',
+        'HOST': 'localhost',
+        'PORT': '3306'
     }
 }
-
 
 
 # Password validation
