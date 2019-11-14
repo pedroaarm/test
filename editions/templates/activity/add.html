@@ -1,0 +1,113 @@
+{% extends 'base.html' %}
+{% load widget_tweaks %}
+{% block body %}
+{% load staticfiles %}
+
+  <style type="text/css">
+    .add-row {
+        padding-left:18px;
+        background:url({% static 'formset/images/add.png'%}) no-repeat left center;
+    }
+    .delete-row {
+        display:block;
+        margin:6px 0 0 0;
+        padding-left:18px;
+        background:url({% static 'formset/images/delete.png'%}) no-repeat left center; 
+    }
+    .dynamic-form {
+        margin-bottom:6px;
+        padding-bottom:6px;
+        border-bottom:1px dotted #ccc;
+    }
+  </style>
+
+<div class="content">
+	<div class="row">
+		<div class=" col-md-offset-1 col-md-10">
+			<h3>Adicionar Atividade</h3>
+			<div class="box box-primary">
+				<form action="." class="form-group" method="post">{% csrf_token %}
+					<div class="box-body">
+						{% for field in form %} 
+						{% if field.errors %}
+						<div class="form-group error" >
+							<label class="control-label" >{{ field.label }}</label>
+							{{ field|add_class:"form-control input-md" }}
+							{% for error in field.errors%}
+							<span class="help-inline error">{{ error}}</span>
+							{% endfor%}
+						</div>
+						{%else%}
+						<div class="form-group">
+							<label class="control-label" >{{ field.label }}</label>
+							{{ field|add_class:"form-control input-md" }}
+						</div>
+						{%endif%}
+						{% endfor %}
+
+						<div class="table-responsive ">
+    						<table class="table table-striped" id="activity_table">
+						        <thead>
+						            <tr>
+						                <th >Data</th>
+						                <th>Inicio (formato: hh:mm)</th>
+						                <th>Fim (formato: hh:mm)</th>
+						                <th>Ação</th>
+
+						            </tr>
+						        </thead>
+						        <tbody>
+									{% for timeActivity in activity_time_formset %}
+									<tr {% if not timeActivity.pk %} class="dynamic"{% endif %}  id="{{ timeActivity.prefix }}-row">
+										{{ timeActivity.id }}
+										<td >{{timeActivity.date}}</td>
+										<td class="hour-mask">{{timeActivity.date_start}}</td>
+										<td class="hour-mask">{{timeActivity.date_end}}</td>
+										<td>{{timeActivity.DELETE}}</td>
+									</tr>
+									
+									{% endfor %}
+									{{activity_time_formset.management_form}}
+								</tbody>
+							</table>
+						</div>
+	            		    			
+					
+
+						<div class="box-footer">
+							<button type="submit" class="btn btn-success" style="font-weight: bold;"><i class="fa fa-check" aria-hidden="true"></i> Salvar </button>
+							<a class="btn btn-danger pull-right" href="{% url 'editions:list_activity' %}"  style="font-weight: bold;"><i class="fa fa-times" aria-hidden="true"></i> Cancelar</a>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+	<script type="text/javascript" src="{% static 'formset/jquery.formset.js' %}"></script>
+	<script type="text/javascript" src="{% static 'js/jquery.inputmask.bundle.js' %}"></script>
+
+	<script type="text/javascript">
+	    $(function() {
+	        $('#activity_table tbody tr').formset({
+	         	addCssClass: 'add-row',
+						deleteCssClass: 'delete-row',
+						formCssClass: 'dynamic-form',
+						prefix: '{{activity_time_formset.prefix}}',
+						added: (e)=>{
+							$("#activity_table .hour-mask input").inputmask("99:99:99");
+						}
+	        });
+	    })
+	</script>
+	
+{{ block.super }}
+{{ form.media }}
+{% endblock %}
+
+
+

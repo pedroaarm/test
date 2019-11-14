@@ -1,0 +1,139 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% load pagination %}
+{% block body %}
+
+<section class="content-header">
+	<div class="row">
+		<h3 class="col-md-8 col-md-offset-1">{{activity}} - Inscritos </h3>
+	</div>
+
+
+
+	<div id="listItems" class="content">
+		<div class="row">
+			<form action="." class="form-group" method="post">{% csrf_token %}
+				<div class="col-md-9 col-md-offset-1">
+					<div class="box box-primary">
+					{% if inscription.count > 0 %}
+						<div class="box-body">
+							<div class="table-responsive">
+								<table class="table table-hover table-condensed table-bordered table-striped">
+									<thead>
+										<tr class="text-center">
+											<th class="text-center" width="5%">Presente</th>
+											<th class="text-center" width="50%">Participante</th>
+											<th class="text-center" width="45%">Data de Inscrição</th>
+										</tr>
+									</thead>
+									<tbody>
+
+										{% for person in inscription %}
+											<tr>
+												<td><input type="checkbox" class="presence" id="{{person.id}}"></td>
+												<td>{{ person.participant}}</td>
+												<td>{{ person.date_of_inscription}}</td>
+												
+											</tr>
+
+										{% endfor %}
+									</tbody>
+								</table>
+							</div>
+						</div>
+
+						<div class="box-footer">
+							<button onclick="savePresence()" type="button" class="btn btn-success" style="font-weight: bold;"><i class="fa fa-check" aria-hidden="true"></i> Salvar Presença </button>
+							<button type="button" class="btn btn-warning pull-right" onclick="marcarTodos()" style="margin-right: 6px">			marcarTodos/Desmarcar Todos
+							</button>
+						</div>
+					{% else %}
+					<div class="cent">
+						<h4>
+							<b>Nenhuma inscrição para esta atividade.</b>
+						</h4>
+					</div>
+					<br>
+					{% endif %}
+					</div>
+
+				</div>
+			</form>
+		</div>
+	</div>
+</section>
+
+									
+<script type="text/javascript">
+
+ function savePresence() {
+    var participantes = [];
+    $.each( $( ".presence" ), function() {
+       
+       id = this.id; //id do participante
+       presenca = this.checked;
+       
+       var dados_participante = [id,presenca];
+       participantes.push(dados_participante);
+    });
+         
+     // token = "{{csrf_token}}";
+      swal({
+        title: "Salvar Permanentemente!",
+        text: "Deseja realmente salvar as presenças?",
+        type: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#DD6B55",
+        confirmButtonText: "SIM!",
+        cancelButtonText: "CANCELAR!",
+        closeOnConfirm: false,
+
+        allowOutsideClick: false,
+        showLoaderOnConfirm: true,
+      }, function(){
+
+           $.ajax({
+           	
+            type : "POST",
+            data : { 
+            'participantes[]': participantes,
+            'csrfmiddlewaretoken': '{{ csrf_token }}',
+             },
+          })
+           .done(function(json){
+            if ( json.code == 1 )
+            {
+              swal('Salvo!','Presenças salvas com sucesso!',"success");
+            }
+           })
+           .fail(function(f){
+            swal('Falha!','Erro ao salvar as presenças!',"error");
+           });
+
+          });
+ 
+}
+</script>
+
+<script type="text/javascript">
+ function marcarTodos() {
+    
+	$.each( $( ".presence" ), function() {
+		//	this.checked = true;
+		if (this.checked == true) this.checked = false; else this.checked = true; 
+	});
+ 
+}
+</script>
+
+
+{% endblock %}
+
+
+{% block scripts %}
+
+{{ block.super }}
+{{ form.media }}
+
+
+{% endblock %}
