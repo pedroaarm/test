@@ -90,13 +90,13 @@ WSGI_APPLICATION = 'semex_events.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.mysql',
+        'ENGINE': 'django.db.backends.postgresql',
         'NAME': 'espeedu',
-        'USER': 'root',
+        'USER': 'postgres',
         'PASSWORD': 'admin',
-        'HOST': 'localhost',
-        'PORT': '3306'
-    }
+        'HOST': '127.0.0.1',
+        'PORT': '5432',
+   }
 }
 
 

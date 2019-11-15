@@ -26,6 +26,17 @@ ALLOWED_HOSTS = ["localhost", "127.0.0.1"]
 #     }
 # }
 
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.mysql',
+#         'NAME': 'espeedu',
+#         'USER': 'root',
+#         'PASSWORD': 'admin',
+#         'HOST': 'localhost',
+#         'PORT': '3306'
+#     }
+# }
+
 STATIC_URL = '/static/'
 MEDIA_URL = '/media/'
 
