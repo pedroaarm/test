@@ -1,2 +1,3 @@
+python manage.py createsuperuser
 virtualenv -p python3 venv
 pyton manage.py migrate
