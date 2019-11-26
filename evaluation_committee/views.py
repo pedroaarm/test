@@ -12,7 +12,7 @@ from django.db import IntegrityError, transaction
 from django.contrib import messages
 from dal import autocomplete
 from .models import *
-from editions.models import *
+#from editions.models import *
 from django.contrib.auth.decorators import login_required
 from .forms import*
 from django.utils.decorators import method_decorator
@@ -190,15 +190,15 @@ class InterestAreaAutocomplete(autocomplete.Select2QuerySetView):
 
 
 # View para Autocomplete de InterestArea
-class CriteriaAutocomplete(autocomplete.Select2QuerySetView):
-    def get_queryset(self):
+# class CriteriaAutocomplete(autocomplete.Select2QuerySetView):
+#     def get_queryset(self):
 
-        qs = RatingCriteria.objects.all()
+#         qs = RatingCriteria.objects.all()
 
-        if self.q:
-            qs = qs.filter(Q(name__icontains=self.q))
+#         if self.q:
+#             qs = qs.filter(Q(name__icontains=self.q))
 
-        return qs
+#         return qs
 
 
 # Views para Model EvaluationCommittee
@@ -397,74 +397,7 @@ class ListInterestArea(ListView):
 
 
 # Views para Model RatingCriteria
-@method_decorator(login_required, name='dispatch')
-class CreateRatingCriteria(CreateView):
-    """
-    ClassView para Criação de objeto RatingCriteria
-    """
-    model = RatingCriteria
-    form_class = RatingCriteriaForm
-    template_name = 'rating-criteria/add.html'
-
-
-@method_decorator(login_required, name='dispatch')
-class UpdateRatingCriteria(UpdateView):
-    """
-    ClassView para edição de objeto RatingCriteria
-    """
-    model = RatingCriteria
-    form_class = RatingCriteriaForm
-    template_name = 'rating-criteria/add.html'
-
-
-@login_required
-def rating_criteria_delete(request, pk):
-    """
-    View para exclusão de objeto RatingCriteria
-    """
-    rating_criteria= get_object_or_404(RatingCriteria, pk=pk)
-    rating_criteria.delete()
-    return JsonResponse({'msg': "Critério de avaliação excluido com sucesso!", 'code': "1"})
-
-
-@method_decorator(login_required, name='dispatch')
-class ListRatingCriteria(ListView):
-    """
-    ClassView para listagem de objetos RatingCriteria
-    """
-    model = RatingCriteria
-    http_method_names = ['get']
-    template_name = 'rating-criteria/list.html'
-    context_object_name = 'rating_criteria'
-    paginate_by = 25
-
-    def get_queryset(self):
-        self.queryset = super(ListRatingCriteria, self).get_queryset()
-        if self.request.GET.get('search_box', False):
-            self.queryset=self.queryset.filter(name__icontains = self.request.GET['search_box'])
-        return self.queryset
-
-    def get_context_data(self, **kwargs):
-        _super = super(ListRatingCriteria, self)
-        context = _super.get_context_data(**kwargs)
-        adjacent_pages = 3
-        page_number = context['page_obj'].number
-        num_pages = context['paginator'].num_pages
-        startPage = max(page_number - adjacent_pages, 1)
-        if startPage <= 5:
-            startPage = 1
-        endPage = page_number + adjacent_pages + 1
-        if endPage >= num_pages - 1:
-            endPage = num_pages + 1
-        page_numbers = [n for n in range(startPage, endPage) \
-            if n > 0 and n <= num_pages]
-        context.update({
-        'page_numbers': page_numbers,
-        'show_first': 1 not in page_numbers,
-        'show_last': num_pages not in page_numbers,
-            })
-        return context
-
+# ition matching query does not exist.
 
 # Função para enviar email para avaliador com menos trabalhos
 # def send_work(request, work):
@@ -569,9 +502,9 @@ class CreateWork(CreateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['userwork_formset']=self.userwork_formset
-        from django.utils import timezone
-        event = Edition.objects.filter(ativo=True, start_submissions__lte=timezone.now(), end_submissions__gte=timezone.now()).exists()
-        context['event']=event
+        #from django.utils import timezone
+        #event = Edition.objects.filter(ativo=True, start_submissions__lte=timezone.now(), end_submissions__gte=timezone.now()).exists()
+        #context['event']=event
         return context
 
 
@@ -642,14 +575,14 @@ class UpdateWork(UpdateView):
     def get_success_url(self):
         return reverse('evaluation_committee:list_work')
 
-    # def get_context_data(self, **kwargs):
-    #     context = super().get_context_data(**kwargs)
-    #     context['userwork_formset']=self.userwork_formset
-    #     from django.utils import timezone
-    #     event = Edition.objects.filter(ativo=True, start_submissions__lte=timezone.now(), end_submissions__gte=timezone.now()).exists()
-    #     context['event']=event
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['userwork_formset']=self.userwork_formset
+        #from django.utils import timezone
+        #event = Edition.objects.filter(ativo=True, start_submissions__lte=timezone.now(), end_submissions__gte=timezone.now()).exists()
+        #context['event']=event
 
-    #     return context
+        return context
 
 
 @login_required
@@ -684,16 +617,16 @@ class ListWork(ListView):
         if self.request.GET.get('search_box', False):
             #edition = Edition.objects.get(ativo=True)
             try:
-                campus = Campus.objects.get(name__contains=self.request.GET['search_box'])
-                inscriptions = Inscription.objects.filter(campus__name__icontains=self.request.GET['search_box'])
-                users = [x.user for x in inscriptions]
+                #campus = Campus.objects.get(name__contains=self.request.GET['search_box'])
+                #inscriptions = Inscription.objects.filter(campus__name__icontains=self.request.GET['search_box'])
+                #users = [x.user for x in inscriptions]
                 workAuthor = UserWork.objects.filter(user__in=users)
                 works_id = [w.work.id for w in workAuthor]
                 self.queryset=self.queryset.filter(Q(id__in=works_id))
             except:
                 pass
-            inscriptions = Inscription.objects.filter(campus__name__icontains=self.request.GET['search_box'])
-            users = [x.user for x in inscriptions]
+            #inscriptions = Inscription.objects.filter(campus__name__icontains=self.request.GET['search_box'])
+            #users = [x.user for x in inscriptions]
             workAuthor = UserWork.objects.filter(user__in=users)
             works_id = [w.work.id for w in workAuthor]
             self.queryset=self.queryset.filter(Q(title__icontains = self.request.GET['search_box']) | Q(id__in=works_id))
@@ -735,44 +668,44 @@ class CreateEvaluation(CreateView):
     template_name = 'evaluation/add.html'
 
     def get(self, request, *args, **kwargs):
-        edition = Edition.objects.get(ativo=True)
-        self.rating_criteria_event = RatingCriteria.objects.filter(edition=edition)
-        items = []
-        for criteria in self.rating_criteria_event:
-            items.append({'criteria': criteria, 'value': 0.0 ,})
+        # edition = Edition.objects.get(ativo=True)
+        # self.rating_criteria_event = RatingCriteria.objects.filter(edition=edition)
+        # items = []
+        # for criteria in self.rating_criteria_event:
+        #     items.append({'criteria': criteria, 'value': 0.0 ,})
 
         
-        self.evaluation_rating_criteria = EvaluationRatingCriteriaFormSet(initial=items)
+        # self.evaluation_rating_criteria = EvaluationRatingCriteriaFormSet(initial=items)
 
         return super(CreateEvaluation,self).get(request, *args, **kwargs)
     
     def post(self, request, *args, **kwargs):
         form = self.get_form()
-        self.evaluation_rating_criteria = EvaluationRatingCriteriaFormSet(self.request.POST)
-        if form.is_valid() and self.evaluation_rating_criteria.is_valid():
+        #self.evaluation_rating_criteria = EvaluationRatingCriteriaFormSet(self.request.POST)
+        if form.is_valid():  #and self.evaluation_rating_criteria.is_valid()
             return self.form_valid(form)
         else:
             return self.form_invalid(form)
 
     def form_valid(self,form):
         self.object = form.save()
-        self.evaluation_rating_criteria.instance=self.object
-        self.evaluation_rating_criteria.save()
-        edition = Edition.objects.get(ativo=True)
-        self.rating_criteria_event = RatingCriteria.objects.filter(edition=edition)
+        #self.evaluation_rating_criteria.instance=self.object
+        #self.evaluation_rating_criteria.save()
+        #edition = Edition.objects.get(ativo=True)
+        #self.rating_criteria_event = RatingCriteria.objects.filter(edition=edition)
     
-        for criteria in self.rating_criteria_event:
-            name = "criteria-" + str(criteria.id)
-            value = float(self.request.POST[name])
-            evaluation_rating_criteria = EvaluationRatingCriteria.objects.create(criteria=criteria, evaluation=evaluation, value=value)
-            evaluation_rating_criteria.save()
+        # for criteria in self.rating_criteria_event:
+        #     name = "criteria-" + str(criteria.id)
+        #     value = float(self.request.POST[name])
+        #     evaluation_rating_criteria = EvaluationRatingCriteria.objects.create(criteria=criteria, evaluation=evaluation, value=value)
+        #     evaluation_rating_criteria.save()
 
         return HttpResponseRedirect(reverse('evaluation_committee:list_evaluation'))
 
     def get_context_data(self, **kwargs):
         context = super(CreateEvaluation,self).get_context_data(**kwargs)
-        context['rating_criteria_event'] = self.rating_criteria_event
-        context['evaluation_rating_criteria'] = self.evaluation_rating_criteria
+        #context['rating_criteria_event'] = self.rating_criteria_event
+        #context['evaluation_rating_criteria'] = self.evaluation_rating_criteria
         return context
 
 
@@ -788,27 +721,27 @@ class UpdateEvaluation(UpdateView):
     def get(self, request, *args, **kwargs):
         self.object = self.get_object()
         # self.evaluation_rating_criteria = EvaluationRatingCriteria.objects.filter(evaluation=self.object)
-        self.evaluation_rating_criteria = EvaluationRatingCriteriaFormSet(instance=self.object)
+        #self.evaluation_rating_criteria = EvaluationRatingCriteriaFormSet(instance=self.object)
         return super(UpdateEvaluation,self).get(request, *args, **kwargs)
     
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
         form = self.form_class(self.request.POST, instance=self.object)
-        self.evaluation_rating_criteria = EvaluationRatingCriteriaFormSet(self.request.POST, instance=self.object)
-        if form.is_valid() and self.evaluation_rating_criteria.is_valid():
+        #self.evaluation_rating_criteria = EvaluationRatingCriteriaFormSet(self.request.POST, instance=self.object)
+        if form.is_valid(): #and self.evaluation_rating_criteria.is_valid()
             return self.form_valid(form)
         else:
             return self.form_invalid(form)
 
     def form_valid(self,form):
         self.object = form.save()
-        self.evaluation_rating_criteria.save()
+        #self.evaluation_rating_criteria.save()
         return HttpResponseRedirect(reverse('evaluation_committee:list_evaluation'))
 
     def get_context_data(self, **kwargs):
-        self.evaluation_rating_criteria.extra=0
+        #self.evaluation_rating_criteria.extra=0
         context = super(UpdateEvaluation,self).get_context_data(**kwargs)
-        context['evaluation_rating_criteria'] = self.evaluation_rating_criteria
+        #context['evaluation_rating_criteria'] = self.evaluation_rating_criteria
         return context
 
 
@@ -887,7 +820,7 @@ class GetEvaluation(DetailView):
     
     def get_context_data(self, **kwargs):
         context = super(GetEvaluation,self).get_context_data(**kwargs)
-        context['rating_criteria'] = EvaluationRatingCriteria.objects.filter(evaluation=self.object)
+        #context['rating_criteria'] = EvaluationRatingCriteria.objects.filter(evaluation=self.object)
         context['authors'] = UserWork.objects.filter(work=self.object.work)
         return context
 

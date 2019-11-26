@@ -22,7 +22,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('core/', include('core.urls', namespace='core')),
     path('accounts/', include('accounts.urls', namespace='accounts')),
-    path('editions/', include('editions.urls')),
+    #path('editions/', include('editions.urls')),
     path('evaluation-committee/', include('evaluation_committee.urls', namespace="evaluation_committee")),
     path('', include('website.urls', namespace='website')),
 

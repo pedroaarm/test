@@ -1,6 +1,0 @@
-python manage.py createsuperuser
-virtualenv -p python3 venv
-pyton manage.py migrate
-
-evaluation-committee/templates/evaluation-committee/add.html
-linhas da 74 ate 90 comentadas para remover label campus e edicao 

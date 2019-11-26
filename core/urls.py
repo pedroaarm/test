@@ -7,5 +7,5 @@ app_name = 'core'
 
 urlpatterns = [
     path('', index, name='index'), # Pagina inicial
-    path('ranking/', ranking, name='ranking'),
+    #path('ranking/', ranking, name='ranking'),
 ]

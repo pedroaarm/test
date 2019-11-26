@@ -7,13 +7,13 @@ DEBUG = True
 
 ALLOWED_HOSTS = ["localhost", "127.0.0.1"]
 
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': os.path.join(BASE_DIR,'db.sqlite3')
+    }
+}
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': os.path.join(BASE_DIR,'db.sqlite3')
-#     }
-# }
 
 # DATABASES = {
 #     'default': {
@@ -23,17 +23,6 @@ ALLOWED_HOSTS = ["localhost", "127.0.0.1"]
 #         'PASSWORD': 'semex2019',
 #         'HOST': '127.0.0.1',
 #         'PORT': '5432',
-#     }
-# }
-
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.mysql',
-#         'NAME': 'espeedu',
-#         'USER': 'root',
-#         'PASSWORD': 'admin',
-#         'HOST': 'localhost',
-#         'PORT': '3306'
 #     }
 # }
 

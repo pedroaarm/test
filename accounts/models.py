@@ -77,14 +77,14 @@ class User(AbstractBaseUser, PermissionsMixin, AuditModel):
     # propriedade para saber se o usuário faz parte do comitê avaliador
     @property
     def is_evaluation_committee(self):
-        from editions.models import Edition
+        #from editions.models import Edition
         from evaluation_committee.models import EvaluationCommittee
         from evaluation_committee.models import UserCommittee
         from datetime import datetime
 
         try:
-            edition = Edition.objects.get(ativo=True, start_of_registrations__lte=datetime.now(), end_of_registrations__gte=datetime.now())
-            if UserCommittee.objects.filter(user=self, committee__edition=edition).exists():
+            #edition = Edition.objects.get(ativo=True, start_of_registrations__lte=datetime.now(), end_of_registrations__gte=datetime.now())
+            if UserCommittee.objects.filter(user=self).exists(): #, committee__edition=edition
                 return True
 
             return False
@@ -93,18 +93,18 @@ class User(AbstractBaseUser, PermissionsMixin, AuditModel):
             return False
 
 
-    @property
-    def is_organizer(self):
-        from editions.models import Edition
+    # @property
+    # def is_organizer(self):
+    #     #from editions.models import Edition
 
-        try:
-            edition = Edition.objects.get(ativo=True)
-            if self in edition.organizers.all():
-                return True
+    #     try:
+    #         #edition = Edition.objects.get(ativo=True)
+    #         if self in edition.organizers.all():
+    #             return True
             
-            return False
-        except:
-            return False
+    #         return False
+    #     except:
+    #         return False:
 
  
     # propriedade para saber se o usuário eh um partcicipante

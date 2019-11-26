@@ -1,23 +1,7 @@
 {% extends 'base_public.html' %}
 {% load staticfiles %}
 {% load widget_tweaks %}
-{% block title %}SEMEX | Inscrição{% endblock %}
-
-{% block header %}
-    <!--Header-area-->
-    <header class="header-area overlay full-height relative v-center">
-        <div class="absolute anlge-bg"></div>
-        <div class="container">
-            <div class="row v-center">
-                <div class="col-xs-12 col-md-12 text-center">
-                    <img src="{% static 'images/SIUFPI_site.png' %}" alt="">
-                    <h1>INSCRIÇÃO</h1>
-                </div>
-            </div>
-        </div>
-    </header>
-    <!--Header-area/-->
-{% endblock %}
+{% block title %}ESPPEdu{% endblock %}
 
 {% block body %}
     <section class="gray-bg section-padding" id="form-page">
@@ -25,7 +9,7 @@
             <div class="row">
                 <div class="col-xs-12 col-sm-8 col-sm-offset-2 text-center">
                     <div class="page-title">
-                      <h2>SEMEX - Inscrição</h2>
+                      <h2>CADASTRO</h2>
                     </div>
                 </div>
             </div>
@@ -89,6 +73,7 @@
     </section>
 
 {% endblock %}
+
 {% block scripts %}
 {{ block.super }}
 {{ form.media }}
